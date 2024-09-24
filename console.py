@@ -128,7 +128,7 @@ class HBNBCommand(cmd.Cmd):
             return
         
         if args[0] in self.classes:
-            model:BaseModel = self.classes[args[0]]()
+            model = self.classes[args[0]]()
             for arg in args:
                 if '=' in arg:
                     attr, value = arg.split('=')
