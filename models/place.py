@@ -9,7 +9,6 @@ from models.review import Review
 from models.amenity import Amenity
 
 class Place(BaseModel, Base):
-
     """ A place to stay """
     __tablename__ = 'places'
 
@@ -24,26 +23,22 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer, default=0, nullable=False)
         latitude = Column(Float, nullable=False)
         longitude = Column(Float, nullable=False)
-        reviews = relationship('Review', cascade='all, delete,delete-orphan',
-                               backref='place')
 
+        # Relationship for reviews
+        reviews = relationship('Review', cascade='all, delete-orphan', backref='place')
+
+        # Association table for amenities
         place_amenity = Table(
             'place_amenity',
             Base.metadata,
-            Column(
-                'place_id',
-                ForeignKey('places.id'),
-                primary_key=True,
-                nullable=False),
-            Column(
-                'amenity_id',
-                ForeignKey('amenities.id'),
-                primary_key=True,
-                nullable=False))
-        amenities = relationship('Amenity', secondary=place_amenity,
-                                 viewonly=False)
+            Column('place_id', ForeignKey('places.id'), primary_key=True, nullable=False),
+            Column('amenity_id', ForeignKey('amenities.id'), primary_key=True, nullable=False)
+        )
+        # Relationship for amenities
+        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
 
     else:
+        # Attributes for the FileStorage mode
         city_id = ""
         user_id = ""
         name = ""
@@ -58,37 +53,18 @@ class Place(BaseModel, Base):
 
         @property
         def reviews(self):
-            '''returns the list of Review instances with place_id
-                equals the current Place.id
-                FileStorage relationship between Place and Review
-            '''
+            """Returns the list of Review instances with place_id equal to current Place.id"""
             from models import storage
-            related_reviews = []
-            reviews = storage.all(Review).items()
-            for review in reviews.values():
-                if review.place_id == self.id:
-                    related_reviews.append(review)
-            return related_reviews
+            return [review for review in storage.all(Review).values() if review.place_id == self.id]
 
         @property
         def amenities(self):
-            '''returns the list of Review instances with place_id
-                equals the current Place.id
-                FileStorage relationship between Place and Review
-            '''
+            """Returns the list of Amenity instances associated with the current Place."""
             from models import storage
-            related_amenities = []
-
-            amenities = storage.all(Amenity).items()
-            for amenity in amenities.values():
-                if amenity.place_id == self.id:
-                    related_amenities.append(amenity)
-            return related_amenities
+            return [amenity for amenity in storage.all(Amenity).values() if amenity.id in self.amenity_ids]
 
         @amenities.setter
         def amenities(self, obj):
-            if obj is None:
-                pass
-            if isinstance(obj, Amenity):
-                if obj.id not in self.amenity.id:
-                    self.amenity_ids.append(obj.id)
+            """Adds an Amenity instance to the current Place."""
+            if isinstance(obj, Amenity) and obj.id not in self.amenity_ids:
+                self.amenity_ids.append(obj.id)
