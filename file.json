@@ -51,5 +51,13 @@
     "name": "Mike",
     "age": "20",
     "__class__": "BaseModel"
+  },
+  "User.1f03c0a4-d658-4246-9204-847897fadf1d": {
+    "id": "1f03c0a4-d658-4246-9204-847897fadf1d",
+    "created_at": "2024-09-25T00:27:15.796403",
+    "updated_at": "2024-09-25T00:27:15.796403",
+    "email": "a@a.com",
+    "password": "pwd",
+    "__class__": "User"
   }
 }
