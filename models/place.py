@@ -35,7 +35,8 @@ class Place(BaseModel, Base):
             Column('amenity_id', ForeignKey('amenities.id'), primary_key=True, nullable=False)
         )
         # Relationship for amenities
-        amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
+        amenities = relationship('Amenity', secondary=place_amenity, 
+                                 viewonly=False, back_populates="place_amenities")
 
     else:
         # Attributes for the FileStorage mode
