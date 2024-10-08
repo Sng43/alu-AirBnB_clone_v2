@@ -27,5 +27,14 @@ def c_is_fun(text):
     text_with_no_slashes = text.replace('_', ' ')
     return f"C {text_with_no_slashes}"
 
+@app.route('/python/', strict_slashes=False)
+@app.route('/python/<text>', strict_slashes=False)
+def python_is_fun(text='cool'):
+    """
+    Python is fun
+    """
+    text_with_no_underscore = text.replace('_', ' ')
+    return f"Python is {text_with_no_underscore}"
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
