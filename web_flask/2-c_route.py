@@ -22,7 +22,7 @@ def hbnb():
 @app.route('/c/<text>', strict_slashes=False)
 def c_is_fun(text):
     """ 
-    c route with dynamic text 
+    C route with dynamic text 
     """
     text_with_no_slashes = text.replace('_', ' ')
     return f"C {text_with_no_slashes}"
