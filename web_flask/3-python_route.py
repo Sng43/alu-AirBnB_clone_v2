@@ -61,7 +61,7 @@ def c_is_fun(text):
 
 @app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
-def python_is_fun(text='cool'):
+def python_is_fun(text='is_cool'):
     """
     Python route handler with dynamic text.
 
@@ -74,7 +74,7 @@ def python_is_fun(text='cool'):
              in 'text' are replaced by spaces.
     """
     text_with_no_underscore = text.replace('_', ' ')
-    return f"Python is {text_with_no_underscore}"
+    return f"Python {text_with_no_underscore}"
 
 
 if __name__ == '__main__':
